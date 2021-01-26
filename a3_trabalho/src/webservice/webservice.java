@@ -8,6 +8,8 @@ package webservice;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -15,11 +17,13 @@ import javax.ws.rs.client.WebTarget;
  */
 public class webservice {
     
-    public void teste(){
+    public void getAllTemplates(){
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.handwrytten.com");
         //todos templates
         String request = target.path("v1/templates/list").request().get(String.class);
+        JSONObject my_obj = new JSONObject();
+        JSONArray elenco = my_obj.getJSONArray(request);
         System.out.println(request);
     }
 }
