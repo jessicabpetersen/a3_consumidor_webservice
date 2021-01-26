@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package a3.consumidor.webservice;
+package webservice;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -13,18 +13,13 @@ import javax.ws.rs.client.WebTarget;
  *
  * @author Jessica
  */
-public class A3ConsumidorWebservice {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+public class webservice {
+    
+    public void teste(){
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.handwrytten.com");
         //todos templates
         String request = target.path("v1/templates/list").request().get(String.class);
         System.out.println(request);
     }
-    
 }
