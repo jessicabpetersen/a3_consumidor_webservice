@@ -9,9 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import model.Template;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -20,7 +25,7 @@ import org.json.JSONObject;
  */
 public class Webservice {
     
-    public List<Template> getAllTemplates(){
+    public List<Template> getAllTemplates() throws JSONException {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.handwrytten.com");
         //todos templates
@@ -44,8 +49,21 @@ public class Webservice {
             System.out.println("ID: "+template.getId()+" _ Id Categoria: "+template.getCategory_id()+
                     "_ Name: "+template.getName());
         }
-        
-        
         return listaTemplate;
+    }
+    public void postTemplate(String nome, String mensagem, String uid) {
+        Client client = ClientBuilder.newClient();
+        HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic("aa", "bb");
+        client.register(feature);
+
+        Template template = new Template();
+        template.setMessage(mensagem);
+        template.setName(nome);
+        template.setUid(uid);
+
+        WebTarget webTarget = client.target("https://api.handwrytten.com");
+        Response response = webTarget.path("v1/templates/create").request().post(Entity.entity(template, MediaType.APPLICATION_JSON_TYPE));
+        System.out.println(response.getStatus()); // 201 - ok 401 - nao autorizado 500 - outros erros, por exemplo, nome repetido
+        System.out.println(response.getStatusInfo());
     }
 }

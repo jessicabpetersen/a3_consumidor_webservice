@@ -7,8 +7,11 @@ package view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import model.Template;
+import org.json.JSONException;
 import webservice.Webservice;
 
 /**
@@ -144,7 +147,11 @@ public class getTemplate extends javax.swing.JFrame {
 
     private void btn_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscarActionPerformed
         List<Template> lista = new ArrayList<>();
-        lista = webservice.getAllTemplates();
+        try {
+            lista = webservice.getAllTemplates();
+        } catch (JSONException ex) {
+            Logger.getLogger(getTemplate.class.getName()).log(Level.SEVERE, null, ex);
+        }
         DefaultTableModel table = (DefaultTableModel) tabelaTemplates.getModel();
         if(!this.campo_id_categoria.getText().equals("")){
             //está sendo filtrada

@@ -5,17 +5,22 @@
  */
 package view;
 
+import webservice.Webservice;
+
 /**
  *
  * @author Jessica
  */
 public class createTemplate extends javax.swing.JFrame {
 
+    Webservice webservice;
+    
     /**
      * Creates new form createTemplate
      */
     public createTemplate() {
         initComponents();
+        webservice = new Webservice();
     }
 
     /**
@@ -58,6 +63,11 @@ public class createTemplate extends javax.swing.JFrame {
         jScrollPane1.setViewportView(campo_mensagem_template);
 
         jButton1.setText("Criar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Voltar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -129,6 +139,13 @@ public class createTemplate extends javax.swing.JFrame {
         initial.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String nome = campo_nome_template.getText();
+        String msg = campo_mensagem_template.getText();
+        String uid = ""; // criar campo string pro UID
+        webservice.postTemplate(nome, msg, uid);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
