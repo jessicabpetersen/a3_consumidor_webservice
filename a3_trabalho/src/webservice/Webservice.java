@@ -51,6 +51,7 @@ public class Webservice {
         }
         return listaTemplate;
     }
+
     public void postTemplate(String nome, String mensagem, String uid) {
         Client client = ClientBuilder.newClient();
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic("aa", "bb");
@@ -59,11 +60,12 @@ public class Webservice {
         Template template = new Template();
         template.setMessage(mensagem);
         template.setName(nome);
-        template.setUid(uid);
+        template.setUid("Token");
 
         WebTarget webTarget = client.target("https://api.handwrytten.com");
         Response response = webTarget.path("v1/templates/create").request().post(Entity.entity(template, MediaType.APPLICATION_JSON_TYPE));
         System.out.println(response.getStatus()); // 201 - ok 401 - nao autorizado 500 - outros erros, por exemplo, nome repetido
         System.out.println(response.getStatusInfo());
     }
+
 }
