@@ -5,6 +5,7 @@
  */
 package view;
 
+import javax.swing.JOptionPane;
 import webservice.Webservice;
 
 /**
@@ -14,7 +15,7 @@ import webservice.Webservice;
 public class createTemplate extends javax.swing.JFrame {
 
     Webservice webservice;
-    
+
     /**
      * Creates new form createTemplate
      */
@@ -40,6 +41,8 @@ public class createTemplate extends javax.swing.JFrame {
         campo_mensagem_template = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        campo_uid = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,6 +71,8 @@ public class createTemplate extends javax.swing.JFrame {
             }
         });
 
+        jLabel6.setText("UID");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,16 +84,19 @@ public class createTemplate extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton2))
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(campo_nome_template)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(48, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jButton1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 230, Short.MAX_VALUE)
+                                    .addComponent(jButton2))
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel5)
+                                .addComponent(campo_nome_template)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(campo_uid, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -99,11 +107,15 @@ public class createTemplate extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(campo_nome_template, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(campo_uid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -123,10 +135,34 @@ public class createTemplate extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String nome = campo_nome_template.getText();
         String msg = campo_mensagem_template.getText();
-        String uid = ""; // criar campo string pro UID
-        webservice.postTemplate(nome, msg, uid);
+        String uid = campo_uid.getText();
+        if(!validaCamposPreenchidos(nome, msg, uid)) {
+            JOptionPane.showMessageDialog(this, webservice.postTemplate(nome, msg, uid));
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private boolean validaCamposPreenchidos(String nome, String msg, String uid) {
+        boolean bErro = false;
+        String sErro = "";
+        if(nome.equals("")) {
+            sErro += "O campo 'Nome do Template' é obrigatório.\n";
+            bErro = true;
+        }
+        if(msg.equals("")) {
+            sErro += "O campo 'Mensagem' é obrigatório.\n";
+            bErro = true;
+        }
+        if(uid.equals("")) {
+            sErro += "O campo 'UID' é obrigatório.\n";
+            bErro = true;
+        }
+        
+        if(!sErro.equals("")) {
+            JOptionPane.showMessageDialog(this, sErro);
+        }
+        return bErro;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -166,11 +202,13 @@ public class createTemplate extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea campo_mensagem_template;
     private javax.swing.JTextField campo_nome_template;
+    private javax.swing.JTextField campo_uid;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

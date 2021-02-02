@@ -5,6 +5,7 @@
  */
 package webservice;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.client.Client;
@@ -24,18 +25,18 @@ import org.json.JSONObject;
  * @author Jessica
  */
 public class Webservice {
-    
+
     public List<Template> getAllTemplates() throws JSONException {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.handwrytten.com");
         //todos templates
         String request = target.path("v1/templates/list").request().get(String.class);
-        
+
         JSONObject object = new JSONObject(request);
-        
+
         JSONArray templates = object.getJSONArray("templates");
         List<Template> listaTemplate = new ArrayList<>();
-        for(int i=0; i < templates.length(); i++){
+        for (int i = 0; i < templates.length(); i++) {
             Template template = new Template();
             JSONObject t = templates.getJSONObject(i);
             template.setCategory_id(t.getInt("category_id"));
@@ -46,13 +47,12 @@ public class Webservice {
             template.setSignature2("");
             template.setWishes("");
             listaTemplate.add(template);
-            System.out.println("ID: "+template.getId()+" _ Id Categoria: "+template.getCategory_id()+
-                    "_ Name: "+template.getName());
         }
         return listaTemplate;
     }
 
-    public void postTemplate(String nome, String mensagem, String uid) {
+    public String postTemplate(String nome, String mensagem, String uid) {
+        String sRetorno;
         Client client = ClientBuilder.newClient();
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic("aa", "bb");
         client.register(feature);
@@ -60,12 +60,29 @@ public class Webservice {
         Template template = new Template();
         template.setMessage(mensagem);
         template.setName(nome);
-        template.setUid("Token");
+        template.setUid(uid);
 
         WebTarget webTarget = client.target("https://api.handwrytten.com");
         Response response = webTarget.path("v1/templates/create").request().post(Entity.entity(template, MediaType.APPLICATION_JSON_TYPE));
-        System.out.println(response.getStatus()); // 201 - ok 401 - nao autorizado 500 - outros erros, por exemplo, nome repetido
-        System.out.println(response.getStatusInfo());
+
+        switch (response.getStatus()) {
+            case 404:
+                sRetorno = "O caminho especificado não existe (404 - not found).";
+                break;
+            case 401:
+                sRetorno = "Usuário sem autorização. (UID not found)";
+                break;
+            case 500:
+                sRetorno = "Houve um erro ao processar a requisição.";
+                break;
+            case 200:
+                Template t = response.readEntity(Template.class);
+                sRetorno = "Novo template cadastrado. ID: " + t.getId();
+                break;
+                default:
+                sRetorno = "Ocorreu um erro inesperado ao processar os dados.";
+        }
+        return sRetorno;
     }
 
 }
