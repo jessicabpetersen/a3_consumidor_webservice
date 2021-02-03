@@ -10,6 +10,7 @@ package model;
  * @author Jessica
  */
 public class Template {
+
     private int id;
     private int category_id;
     private String name;
@@ -17,6 +18,7 @@ public class Template {
     private String wishes;
     private String signature;
     private String signature2;
+    private String uid;
 
     public int getId() {
         return id;
@@ -73,6 +75,13 @@ public class Template {
     public void setSignature2(String signature2) {
         this.signature2 = signature2;
     }
-    
-    
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
 }

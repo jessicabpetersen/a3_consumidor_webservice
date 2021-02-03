@@ -7,8 +7,11 @@ package view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import model.Template;
+import org.json.JSONException;
 import webservice.Webservice;
 
 /**
@@ -16,7 +19,9 @@ import webservice.Webservice;
  * @author Jessica
  */
 public class getTemplate extends javax.swing.JFrame {
-    Webservice webservice; 
+
+    Webservice webservice;
+
     /**
      * Creates new form getTemplate
      */
@@ -144,19 +149,23 @@ public class getTemplate extends javax.swing.JFrame {
 
     private void btn_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscarActionPerformed
         List<Template> lista = new ArrayList<>();
-        lista = webservice.getAllTemplates();
+        try {
+            lista = webservice.getAllTemplates();
+        } catch (JSONException ex) {
+            Logger.getLogger(getTemplate.class.getName()).log(Level.SEVERE, null, ex);
+        }
         DefaultTableModel table = (DefaultTableModel) tabelaTemplates.getModel();
-        if(!this.campo_id_categoria.getText().equals("")){
+        if (!this.campo_id_categoria.getText().equals("")) {
             //está sendo filtrada
-            for(int i = 0; i < lista.size(); i++){
-                if(Integer.parseInt(this.campo_id_categoria.getText()) == lista.get(i).getCategory_id()){
+            for (int i = 0; i < lista.size(); i++) {
+                if (Integer.parseInt(this.campo_id_categoria.getText()) == lista.get(i).getCategory_id()) {
                     table.addRow(new Object[]{lista.get(i).getId(), lista.get(i).getCategory_id(), lista.get(i).getName(),
-                    lista.get(i).getMessage(), lista.get(i).getWishes(), lista.get(i).getSignature(), lista.get(i).getSignature2()});
+                        lista.get(i).getMessage(), lista.get(i).getWishes(), lista.get(i).getSignature(), lista.get(i).getSignature2()});
                 }
             }
-        }else{
+        } else {
             //exibit todos
-            for(int i = 0; i < lista.size(); i++){
+            for (int i = 0; i < lista.size(); i++) {
                 table.addRow(new Object[]{lista.get(i).getId(), lista.get(i).getCategory_id(), lista.get(i).getName(),
                     lista.get(i).getMessage(), lista.get(i).getWishes(), lista.get(i).getSignature(), lista.get(i).getSignature2()});
             }
