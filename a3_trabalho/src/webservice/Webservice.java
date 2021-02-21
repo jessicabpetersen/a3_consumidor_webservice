@@ -64,6 +64,8 @@ public class Webservice {
         WebTarget webTarget = client.target("https://api.handwrytten.com");
         Response response = webTarget.path("v1/templates/create").request().post(Entity.entity(template, MediaType.APPLICATION_JSON_TYPE));
 
+        System.out.println(response.toString());
+
         switch (response.getStatus()) {
             case 404:
                 sRetorno = "O caminho especificado não existe (404 - not found).";
@@ -76,6 +78,9 @@ public class Webservice {
                 break;
             case 200:
                 sRetorno = "Novo template cadastrado.";
+                break;
+                case 400:
+                sRetorno = "Falaha no cadastro.";
                 break;
                 default:
                 sRetorno = "Ocorreu um erro inesperado ao processar os dados.";
