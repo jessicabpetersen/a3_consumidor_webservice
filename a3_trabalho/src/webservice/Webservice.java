@@ -29,7 +29,6 @@ public class Webservice {
     public List<Template> getAllTemplates() throws JSONException {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("https://api.handwrytten.com");
-        //todos templates
         String request = target.path("v1/templates/list").request().get(String.class);
 
         JSONObject object = new JSONObject(request);
@@ -51,7 +50,7 @@ public class Webservice {
         return listaTemplate;
     }
 
-    public String postTemplate(String nome, String mensagem, String uid) {
+    public String postTemplate(String nome, String mensagem) {
         String sRetorno;
         Client client = ClientBuilder.newClient();
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic("aa", "bb");
@@ -60,7 +59,7 @@ public class Webservice {
         Template template = new Template();
         template.setMessage(mensagem);
         template.setName(nome);
-        template.setUid(uid);
+        template.setUid("394b9376e801b3b69f3346e77171f97b");
 
         WebTarget webTarget = client.target("https://api.handwrytten.com");
         Response response = webTarget.path("v1/templates/create").request().post(Entity.entity(template, MediaType.APPLICATION_JSON_TYPE));
@@ -76,8 +75,7 @@ public class Webservice {
                 sRetorno = "Houve um erro ao processar a requisição.";
                 break;
             case 200:
-                Template t = response.readEntity(Template.class);
-                sRetorno = "Novo template cadastrado. ID: " + t.getId();
+                sRetorno = "Novo template cadastrado.";
                 break;
                 default:
                 sRetorno = "Ocorreu um erro inesperado ao processar os dados.";
